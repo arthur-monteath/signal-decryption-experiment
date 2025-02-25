@@ -34,7 +34,6 @@ export default function Grid({ row, role, scenario }: GridProps) {
 
   const [grid, setGrid] = useState<CellData[]>(initialGrid);
   const [moves, setMoves] = useState<number>(0);
-  const [submitted, setSubmitted] = useState<boolean>(false);
   const [startTime, setStartTime] = useState<Date | null>(null);
   const router = useRouter();
   const qPressedRef = useRef(false);
@@ -81,7 +80,6 @@ export default function Grid({ row, role, scenario }: GridProps) {
         }),
       });
       alert("Solution submitted!");
-      setSubmitted(true);
       router.push('/');
     } catch (error) {
       console.error("Submission error:", error);
