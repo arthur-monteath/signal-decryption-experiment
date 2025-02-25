@@ -18,6 +18,7 @@ interface AuthResponse {
 export default function Home() {
   const [rowNumber, setRowNumber] = useState<string>('');
   const [authData, setAuthData] = useState<AuthResponse | null>(null);
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
   const router = useRouter();
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
@@ -36,9 +37,28 @@ export default function Home() {
   };
 
   const handleRoleSelect = (role: string) => {
-    // Navigate to the room page, using the row number as the room identifier and the selected role as a query parameter.
-    router.push(`/room/${rowNumber}?role=${role}`);
+    // Instead of immediately navigating to the room,
+    // store the selected role to trigger the confirmation page.
+    setSelectedRole(role);
   };
+
+  const handleStart = () => {
+    // Once the user confirms by pressing the Start button,
+    // navigate to the game room.
+    router.push(`/room/${rowNumber}?role=${selectedRole}`);
+  };
+
+  // If a role is already selected, show the confirmation page.
+  if (selectedRole) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <img src="/instruction.png" alt="Instructions" className="mb-8" />
+        <button onClick={handleStart} className="bg-green-500 text-white text-2xl p-4 w-32 rounded-xl">
+          Start
+        </button>
+      </div>
+    );
+  }
 
   // If authentication data is available, show the role selection UI.
   if (authData) {
@@ -48,13 +68,13 @@ export default function Home() {
         <div className="flex flex-col space-y-4">
           <button
             onClick={() => handleRoleSelect('StudentA')}
-            className="bg-blue-500 text-white p-2 rounded"
+            className="bg-blue-500 text-white p-2 rounded-lg"
           >
             StudentA: {authData.studentAEmail}
           </button>
           <button
             onClick={() => handleRoleSelect('StudentB')}
-            className="bg-blue-500 text-white p-2 rounded"
+            className="bg-blue-500 text-white p-2 rounded-lg"
           >
             StudentB: {authData.studentBEmail}
           </button>
@@ -72,10 +92,10 @@ export default function Home() {
           type="text"
           value={rowNumber}
           onChange={(e) => setRowNumber(e.target.value)}
-          className="border p-2 mb-4 text-black"
+          className="border p-2 mb-4 text-black rounded-lg"
           placeholder="Row Number"
         />
-        <button type="submit" className="bg-blue-500 text-white p-2">
+        <button type="submit" className="bg-blue-500 text-white p-2 rounded-lg">
           Login
         </button>
       </form>

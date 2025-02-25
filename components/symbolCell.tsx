@@ -6,34 +6,59 @@ interface SymbolCellProps {
   index: number;
   data: CellData;
   onChange: (index: number, updatedData: Partial<CellData>) => void;
+  onSwap: (fromIndex: number, toIndex: number) => void;
 }
 
-const SymbolCell: React.FC<SymbolCellProps> = ({ index, data, onChange }) => {
+const SymbolCell: React.FC<SymbolCellProps> = ({ index, data, onChange, onSwap }) => {
+  // Rotate the symbol on click.
   const handleClick = () => {
-    // Example: rotate the symbol on click
     const newRotation = data.rotation + 90;
     onChange(index, { rotation: newRotation });
   };
 
+  // When dragging starts, save the index in the event's dataTransfer.
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    e.dataTransfer.setData("text/plain", index.toString());
+  };
+
+  // Allow drop by preventing the default.
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+
+  // When a draggable symbol is dropped, retrieve the source index and swap.
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const fromIndexStr = e.dataTransfer.getData("text/plain");
+    const fromIndex = parseInt(fromIndexStr, 10);
+    if (!isNaN(fromIndex) && fromIndex !== index) {
+      onSwap(fromIndex, index);
+    }
+  };
+
+  // Allow marking the cell via keyboard (pressing "M").
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key.toLowerCase() === "m") {
-      // Toggle the marked state when "M" is pressed
       onChange(index, { marked: !data.marked });
     }
   };
 
+  // Automatically focus on hover so that key events can be captured.
   const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Focus this element when the mouse hovers over it
     e.currentTarget.focus();
   };
 
   return (
     <div
+      draggable
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       onMouseEnter={handleMouseEnter}
-      tabIndex={0} // Make the div focusable so it can receive key events
-      className={`select-none p-4 border w-32 h-32 cursor-pointer flex items-center justify-center ${
+      tabIndex={0}
+      className={`select-none border p-4 w-32 h-32 cursor-pointer flex items-center justify-center ${
         data.marked ? "bg-yellow-200 border-yellow-950" : "border-zinc-300"
       }`}
     >

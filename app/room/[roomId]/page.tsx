@@ -14,7 +14,7 @@ export default function RoomPage() {
 
   return (
     <div className="min-h-screen p-4 flex flex-col gap-8 justify-center items-center">
-        <Grid role={role as 'StudentA' | 'StudentB'} row={params.roomId as string} />
+        <Grid scenario={scenario} role={role as 'StudentA' | 'StudentB'} row={params.roomId as string} />
         <Rulebook isPlayerA={isPlayerA} scenario={scenario} />
     </div>
   );

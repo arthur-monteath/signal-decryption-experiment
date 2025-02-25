@@ -4,6 +4,7 @@
 import { useState, useEffect, useRef } from 'react';
 import SymbolCell from './symbolCell';
 import { useRouter } from 'next/navigation';
+import { gridsA, gridsB } from '@/data/grids';
 
 export interface CellData {
   symbol: number; // Reference to one of the 8 symbols (e.g., 1-8)
@@ -14,28 +15,32 @@ export interface CellData {
 interface GridProps {
   row: string;
   role: 'StudentA' | 'StudentB';
+  scenario: 'A' | 'B';
 }
 
-const initialGrid: CellData[] = Array.from({ length: 16 }, () => ({
-  symbol: 1,
-  rotation: 0,
-  marked: false,
-}));
+export default function Grid({ row, role, scenario }: GridProps) {
+  // Choose the initial grid based on the scenario and role.
+  const initialGrid: CellData[] =
+    scenario === 'A'
+      ? role === 'StudentA'
+        ? gridsA.studentA
+        : gridsA.studentB
+      : role === 'StudentA'
+      ? gridsB.studentA
+      : gridsB.studentB;
 
-export default function Grid({ row, role }: GridProps) {
   const [grid, setGrid] = useState<CellData[]>(initialGrid);
   const [moves, setMoves] = useState<number>(0);
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [startTime, setStartTime] = useState<Date | null>(null);
   const router = useRouter();
-
-  // Ref to track if "q" was pressed
   const qPressedRef = useRef(false);
 
   useEffect(() => {
     setStartTime(new Date());
   }, []);
 
+  // Update a single cell's state.
   const handleCellChange = (index: number, updatedData: Partial<CellData>) => {
     setGrid((prev) => {
       const newGrid = [...prev];
@@ -45,10 +50,21 @@ export default function Grid({ row, role }: GridProps) {
     setMoves((prev) => prev + 1);
   };
 
-  // Submission function: submits the grid state to your API route.
+  // Swap two cells.
+  const handleSwap = (fromIndex: number, toIndex: number) => {
+    setGrid((prev) => {
+      const newGrid = [...prev];
+      const temp = newGrid[fromIndex];
+      newGrid[fromIndex] = newGrid[toIndex];
+      newGrid[toIndex] = temp;
+      return newGrid;
+    });
+    setMoves((prev) => prev + 1);
+  };
+
+  // Submit the grid state to the API.
   const submitSolution = async () => {
     const timeTaken = new Date().getTime() - (startTime?.getTime() || new Date().getTime());
-
     try {
       await fetch('/api/checkSolution', {
         method: 'POST',
@@ -70,20 +86,17 @@ export default function Grid({ row, role }: GridProps) {
     }
   };
 
-  // Key handler for detecting Ctrl+Q followed by Ctrl+Enter.
+  // Listen for key combination: Ctrl+Q then Ctrl+Enter.
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // If Ctrl+Q is pressed, mark qPressedRef true.
       if (e.ctrlKey && e.key.toLowerCase() === "q") {
         qPressedRef.current = true;
       }
-      // If Ctrl+Enter is pressed and q was pressed previously, trigger submission.
       if (e.ctrlKey && e.key === "Enter" && qPressedRef.current) {
         const confirmed = confirm("Submit your solution?");
         if (confirmed) {
           submitSolution();
         }
-        // Reset the flag regardless.
         qPressedRef.current = false;
       }
     };
@@ -100,13 +113,19 @@ export default function Grid({ row, role }: GridProps) {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [grid, moves, startTime]); // Ensure the latest grid state is used
+  }, [grid, moves, startTime]);
 
   return (
     <div>
       <div className="grid grid-cols-4 w-fit gap-2 mx-auto">
         {grid.map((cell, index) => (
-          <SymbolCell key={index} index={index} data={cell} onChange={handleCellChange} />
+          <SymbolCell
+            key={index}
+            index={index}
+            data={cell}
+            onChange={handleCellChange}
+            onSwap={handleSwap}
+          />
         ))}
       </div>
       {submitted && <p className="mt-2 font-bold">Solution Submitted</p>}
