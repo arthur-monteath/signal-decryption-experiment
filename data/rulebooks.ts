@@ -8,7 +8,7 @@ export interface Rulebook {
     playerA: [
       "The number of DOTS within your partner's marked symbols MUST equal the number of ROUND symbols in your grid.",
       "The number of ROUND symbols on the bottom of your grid MUST equal the number of POINTY symbols on the top of your partner's grid.",
-      "Your partner must NOT have any pointy symbols on the 4 central blocks of their grid."
+      "Your partner must NOT have any pointy symbols on the 4 central slots of their grid."
     ],
     playerB: [
       "The number of DOTS within the marked symbols of both players MUST be equal.",
