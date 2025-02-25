@@ -14,7 +14,7 @@ export default function RoomPage() {
   const isPlayerA = role === 'StudentA';
 
   return (
-    <div className="min-h-screen p-4 flex flex-col gap-8 justify-center items-center">
+    <div className="min-h-screen p-4 flex flex-row justify-center items-center">
       <Grid
         scenario={scenario}
         role={role as 'StudentA' | 'StudentB'}

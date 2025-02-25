@@ -119,8 +119,7 @@ export default function Grid({ row, role, scenario }: GridProps) {
   }, [grid, moves, startTime]);
 
   return (
-    <div>
-      <div className="grid grid-cols-4 w-fit gap-2 mx-auto">
+      <div className="grid grid-cols-4 w-fit gap-2">
         {grid.map((cell, index) => (
           <SymbolCell
             key={index}
@@ -131,7 +130,5 @@ export default function Grid({ row, role, scenario }: GridProps) {
           />
         ))}
       </div>
-      {submitted && <p className="mt-2 font-bold">Solution Submitted</p>}
-    </div>
   );
 }

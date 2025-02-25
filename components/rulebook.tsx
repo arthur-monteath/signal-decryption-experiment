@@ -13,7 +13,7 @@ const Rulebook: React.FC<RulebookProps> = ({ isPlayerA, scenario }) => {
                                           scenario === 'C' ? rulebookC : rulebookB;
   console.log(scenario);
   return (
-    <div className="p-2 mx-auto max-w-xl">
+    <div className="p-2 ml-8 max-w-xl">
       <h2 className="text-xl font-bold mb-2">Rules</h2>
       <ol className="list-decimal ml-5 text-lg/6">
         {(isPlayerA ? selectedRulebook.playerA : selectedRulebook.playerB).map((rule, idx) => (
