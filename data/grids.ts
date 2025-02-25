@@ -56,3 +56,25 @@ export const gridsB = {
     // ... (total of 16 cells)
   ] as CellData[],
 };
+
+export const gridC: CellData[] = [
+    { symbol: 1, rotation: 0, marked: false },  // Row 1
+    { symbol: 5, rotation: 90, marked: true },
+    { symbol: 7, rotation: 90, marked: true },
+    { symbol: 8, rotation: 180, marked: false },
+  
+    { symbol: 3, rotation: 0, marked: true },  // Row 2
+    { symbol: 4, rotation: 90, marked: false },
+    { symbol: 6, rotation: 270, marked: false },
+    { symbol: 6, rotation: 180, marked: true },
+  
+    { symbol: 2, rotation: 0, marked: false },  // Row 3 (CENTER ROW)
+    { symbol: 2, rotation: 90, marked: false },
+    { symbol: 3, rotation: 270, marked: true },
+    { symbol: 7, rotation: 180, marked: false },
+  
+    { symbol: 8, rotation: 0, marked: false },  // Row 4
+    { symbol: 4, rotation: 90, marked: true },
+    { symbol: 4, rotation: 180, marked: false },
+    { symbol: 5, rotation: 270, marked: true }
+  ];  

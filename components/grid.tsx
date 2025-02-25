@@ -4,7 +4,7 @@
 import { useState, useEffect, useRef } from 'react';
 import SymbolCell from './symbolCell';
 import { useRouter } from 'next/navigation';
-import { gridsA, gridsB } from '@/data/grids';
+import { gridsA, gridsB, gridC } from '@/data/grids';
 
 export interface CellData {
   symbol: number; // Reference to one of the 8 symbols (e.g., 1-8)
@@ -15,7 +15,7 @@ export interface CellData {
 interface GridProps {
   row: string;
   role: 'StudentA' | 'StudentB';
-  scenario: 'A' | 'B';
+  scenario: 'A' | 'B' | 'C';
 }
 
 export default function Grid({ row, role, scenario }: GridProps) {
@@ -25,9 +25,12 @@ export default function Grid({ row, role, scenario }: GridProps) {
       ? role === 'StudentA'
         ? gridsA.studentA
         : gridsA.studentB
-      : role === 'StudentA'
-      ? gridsB.studentA
-      : gridsB.studentB;
+      :
+    scenario === 'B'
+      ? role === 'StudentA'
+        ? gridsB.studentA
+        : gridsB.studentB
+    : gridC;
 
   const [grid, setGrid] = useState<CellData[]>(initialGrid);
   const [moves, setMoves] = useState<number>(0);

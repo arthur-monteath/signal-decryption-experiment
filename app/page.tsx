@@ -1,7 +1,7 @@
 // app/page.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface AuthResponse {
@@ -19,7 +19,11 @@ export default function Home() {
   const [rowNumber, setRowNumber] = useState<string>('');
   const [authData, setAuthData] = useState<AuthResponse | null>(null);
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  // Default scenario is 'A'. It can be updated to 'B' or 'C' via key combos.
+  const [scenario, setScenario] = useState<'A' | 'B' | 'C'>('A');
   const router = useRouter();
+  const mPressedRef = useRef(false);
+  const cPressedRef = useRef(false);
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,15 +41,53 @@ export default function Home() {
   };
 
   const handleRoleSelect = (role: string) => {
-    // Instead of immediately navigating to the room,
-    // store the selected role to trigger the confirmation page.
+    // Store the selected role to trigger the confirmation page.
     setSelectedRole(role);
   };
 
+  // Listen for key combinations:
+  // Ctrl+M+Enter -> scenario B
+  // Ctrl+Ç+Enter -> scenario C
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key.toLowerCase() === 'm') {
+        mPressedRef.current = true;
+      }
+      if (e.ctrlKey && e.key.toLowerCase() === 'ç') {
+        cPressedRef.current = true;
+      }
+      if (e.ctrlKey && e.key === 'Enter') {
+        e.preventDefault();
+        if (mPressedRef.current) {
+          setScenario('B');
+          mPressedRef.current = false;
+        } else if (cPressedRef.current) {
+          setScenario('C');
+          cPressedRef.current = false;
+        }
+      }
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() === 'm') {
+        mPressedRef.current = false;
+      }
+      if (e.key.toLowerCase() === 'ç') {
+        cPressedRef.current = false;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
+
   const handleStart = () => {
-    // Once the user confirms by pressing the Start button,
-    // navigate to the game room.
-    router.push(`/room/${rowNumber}?role=${selectedRole}`);
+    // Navigate to the room with row, role, and scenario as query parameters.
+    router.push(`/room/${rowNumber}?role=${selectedRole}&scenario=${scenario}`);
   };
 
   // If a role is already selected, show the confirmation page.
@@ -53,7 +95,11 @@ export default function Home() {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
         <img src="/instruction.png" alt="Instructions" className="mb-8" />
-        <button onClick={handleStart} className="bg-green-500 text-white text-2xl p-4 w-32 rounded-xl">
+        <p className="mb-4 text-xl">Current Scenario: {scenario}</p>
+        <button
+          onClick={handleStart}
+          className="bg-green-500 text-white text-2xl p-4 w-32 rounded-xl"
+        >
           Start
         </button>
       </div>
