@@ -58,8 +58,10 @@ const SymbolCell: React.FC<SymbolCellProps> = ({ index, data, onChange, onSwap }
       onKeyDown={handleKeyDown}
       onMouseEnter={handleMouseEnter}
       tabIndex={0}
-      className={`select-none border p-4 w-32 h-32 cursor-pointer flex items-center justify-center ${
-        data.marked ? "bg-yellow-200 border-yellow-950" : "border-zinc-300"
+      className={`select-none p-4 w-32 h-32 cursor-pointer flex items-center justify-center transition-all duration-200 ${
+        data.marked 
+          ? "bg-yellow-200 border-4 border-yellow-950" 
+          : "border-4  hover:border-blue-500"
       }`}
     >
       {data.symbol ? (

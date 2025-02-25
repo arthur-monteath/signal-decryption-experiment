@@ -13,7 +13,8 @@ export interface Rulebook {
     playerB: [
       "The number of dots within the marked symbols of both players must be equal.",
       "If you and your partner have equal symbols on equal positions, their rotations must be equal.",
-      "No straight line in your partner's grid may have 10 or more dots."
+      "You and your partner mustn't mark symbols on the same positions.",
+      "No straight line in neither grids may have 10 or more dots."
     ]
   };
   
