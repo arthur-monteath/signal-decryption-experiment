@@ -24,7 +24,7 @@ export interface Rulebook {
       "Your partner must NOT have ROUND symbols adjacent to each other. (Diagonals are NOT adjacent)"
     ],
     playerB: [
-      "The number of ROUND symbols within your grid must be equal to the total number of DOTS in your partner's marked symbols.",
+      "You must have at least TWO ROUND symbols on the 4 center slots of your grid.",
       "If you and your partner have symbols of the same TYPE in the same positions, their marks must opposite (one marked, one unmarked).",
       "The total sum of DOTS combining yours and your partner's 4 center slots MUST be odd."
     ]
