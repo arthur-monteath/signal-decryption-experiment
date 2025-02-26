@@ -21,7 +21,7 @@ export interface Rulebook {
     playerA: [
       "The total number of DOTS of your marked symbols must equal the number of POINTY symbols in your partner's grid.",
       "You and your partner must NOT mark the same symbols (even if they are in different positions)",
-      "Your partner must NOT have POINTY symbols adjacent to each other."
+      "Your partner must NOT have ROUND symbols adjacent to each other. (Diagonals aren't adjacent)"
     ],
     playerB: [
       "The number of ROUND symbols within your grid must be equal to the total number of DOTS in your partner's marked symbols.",
