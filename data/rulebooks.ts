@@ -19,7 +19,7 @@ export interface Rulebook {
 
   export const rulebookB: Rulebook = {
     playerA: [
-      "The total number of DOTS of your marked symbols must equal the number of POINTY symbols in your partner`s grid.",
+      "The total number of DOTS of your marked symbols must equal the number of POINTY symbols in your partner's grid.",
       "You and your partner must NOT mark the same symbols (even if they are in different positions)",
       "Your partner must NOT have POINTY symbols adjacent to each other."
     ],
