@@ -19,10 +19,14 @@ export interface Rulebook {
 
   export const rulebookB: Rulebook = {
     playerA: [
-      "A.",
+      "The total number of DOTS of your marked symbols must equal the number of POINTY symbols in your partner`s grid.",
+      "You and your partner must NOT mark the same symbols (even if they are in different positions)",
+      "Your partner must NOT have POINTY symbols adjacent to each other."
     ],
     playerB: [
-      "B",
+      "The number of ROUND symbols within your grid must be equal to the total number of DOTS in your partner's marked symbols.",
+      "If you and your partner have symbols of the same TYPE in the same positions, their marks must opposite (one marked, one unmarked).",
+      "The total sum of DOTS combining yours and your partner's 4 center slots MUST be odd."
     ]
   };
   

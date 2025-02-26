@@ -80,7 +80,10 @@ export default function Grid({ row, role, scenario }: GridProps) {
         }),
       });
       alert("Solution submitted!");
-      router.push('/');
+      if (scenario === "A")
+        router.push('https://forms.gle/LkZo5ta7GRzwuzkS7');
+      else if (scenario === "B")
+        router.push('https://forms.gle/xLexqJRxDut6L26Y8');
     } catch (error) {
       console.error("Submission error:", error);
       alert("There was an error submitting your solution.");
